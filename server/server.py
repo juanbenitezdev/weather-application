@@ -94,7 +94,7 @@ def home():
     return 'Hello World'
 
 
-@app.route('/search')
+@app.route('/api/search')
 def search():
     city = request.args.get('city', None)
 

@@ -12,7 +12,7 @@ function SearchBarComponent(props) {
     event.preventDefault();
     if (cityName !== "") {
       axios
-        .get("http://127.0.0.1:5000/search", { params: { city: cityName } })
+        .get("/api/search", { params: { city: cityName } })
         .then((res) => {
           const name = res.data.address;
           props.onSearch(name, res.data);
