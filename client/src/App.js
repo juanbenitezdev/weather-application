@@ -21,7 +21,7 @@ function App() {
   return (
     <div className="App">
       <div className="weather">
-        <h2>Weather API with React</h2>
+        <h2>Weather Application with React</h2>
         <SearchBarComponent
           onSearch={(city, data) => {
             setData(data);
