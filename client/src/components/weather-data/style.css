@@ -1,0 +1,16 @@
+.data-container {
+    display: flex;
+    flex-direction: column;
+    font-size: 25px;
+}
+
+.data-container > .temperature-info {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+}
+  
+.data-container.hidden {
+    display: none;
+}
