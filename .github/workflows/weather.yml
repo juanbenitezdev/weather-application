@@ -1,0 +1,33 @@
+name: Weather Application
+
+on: [push]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v1
+      with:
+        python-version: 3.8
+    - name: Install Dependencies
+      run: |
+        cd server/
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+    - name: Run Server Tests
+      run: |
+        pip install pytest
+        pytest
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v1
+      with:
+        node-version: '12.x'
+    - name: Build Client and Test
+    - run: |
+        cd client/ 
+        npm install
+        npm run build --if-present
+        npm test
