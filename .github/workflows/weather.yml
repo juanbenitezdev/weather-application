@@ -17,10 +17,6 @@ jobs:
         cd server/
         python -m pip install --upgrade pip
         pip install -r requirements.txt
-    - name: Run Server Tests
-      run: |
-        pip install pytest
-        pytest
     - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v1
       with:
@@ -30,4 +26,3 @@ jobs:
         cd client/ 
         npm install
         npm run build --if-present
-        npm test
