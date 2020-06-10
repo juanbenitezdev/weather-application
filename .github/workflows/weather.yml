@@ -3,8 +3,11 @@ name: Weather Application
 on: [push]
 
 jobs:
+  
   build:
+
     runs-on: ubuntu-latest
+    name: Build
 
     steps:
     - uses: actions/checkout@v2
@@ -26,3 +29,21 @@ jobs:
         cd client/ 
         npm install
         npm run build --if-present
+  
+  deploy:
+    needs: [build]
+    runs-on: ubuntu-latest
+    name: Deploy
+
+    steps:
+    - uses: appleboy/ssh-action@master
+    - name: Deploy
+      with:
+        host: ${{ secrets.HOST }}
+        user: ${{ secrets.USER }}
+        key: ${{ secrets.KEY_SECRET }}
+        port: ${{ secrets.PORT }}
+        scripts: |
+          cd /var/www/ 
+          git pull origin master
+          git status
