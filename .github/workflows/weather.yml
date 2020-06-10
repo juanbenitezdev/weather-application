@@ -43,7 +43,7 @@ jobs:
         username: ${{ secrets.USER }}
         key: ${{ secrets.KEY_SECRET }}
         port: ${{ secrets.PORT }}
-        scripts: |
+        script: |
           cd /var/www/ 
           git pull origin master
           git status
