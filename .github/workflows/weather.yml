@@ -44,6 +44,6 @@ jobs:
         key: ${{ secrets.KEY_SECRET }}
         port: ${{ secrets.PORT }}
         script: |
-          cd /var/www/ 
+          cd /var/www/weather-application/
           git pull origin master
           git status
