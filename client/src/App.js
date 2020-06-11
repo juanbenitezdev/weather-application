@@ -5,7 +5,7 @@ import socketIOClient from "socket.io-client";
 import SearchBarComponent from "./components/search-bar";
 import WeatherDataComponent from "./components/weather-data"
 
-const ENDPOINT = "http://127.0.0.1:5000";
+const ENDPOINT = '';
 const socket = socketIOClient(ENDPOINT);
 
 function App() {
@@ -21,7 +21,7 @@ function App() {
   return (
     <div className="App">
       <div className="weather">
-        <h2>Weather Application with React</h2>
+        <h2>Weather Application</h2>
         <SearchBarComponent
           onSearch={(city, data) => {
             setData(data);

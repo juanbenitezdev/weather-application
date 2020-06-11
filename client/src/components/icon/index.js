@@ -2,8 +2,8 @@ import React from "react";
 import "./style.css";
 
 function IconComponent(props) {
-  const url = "http://openweathermap.org/img/wn/" + props.data.icon + "@2x.png";
-  return <img className='icon' src={url} alt="Icon" />;
+  const url = props.data.icon;
+  return Object.keys(props.data).length !== undefined ? <img className='icon' src={url} alt="Icon" /> : null;
 }
 
 export default IconComponent;

@@ -8,8 +8,7 @@ import { faSearch } from '@fortawesome/free-solid-svg-icons'
 function SearchBarComponent(props) {
   const [cityName, setCityName] = useState("");
 
-  const handleOnClick = (event) => {
-    event.preventDefault();
+  const search = () => {
     if (cityName !== "") {
       axios
         .get("/api/search", { params: { city: cityName } })
@@ -22,6 +21,17 @@ function SearchBarComponent(props) {
         });
       setCityName("");
     }
+  }
+
+  const _handleKeyDown = (e) => {
+    if (e.key === 'Enter') {
+      search();
+    }
+  }
+
+  const handleOnClick = (event) => {
+    event.preventDefault();
+    search();
   };
 
   return (
@@ -34,6 +44,7 @@ function SearchBarComponent(props) {
           const text = e.target.value;
           setCityName(text);
         }}
+        onKeyDown={_handleKeyDown}
       />
       <button className='search-button' onClick={handleOnClick}><FontAwesomeIcon icon={faSearch} /></button>
     </div>
