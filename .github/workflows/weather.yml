@@ -1,13 +1,16 @@
 name: Weather Application
 
-on: [push]
+on:
+  push:
+    branches:
+    - master
 
 jobs:
   
   build:
 
     runs-on: ubuntu-latest
-    name: Build
+    name: Build and Test
 
     steps:
     - uses: actions/checkout@v2
@@ -15,12 +18,18 @@ jobs:
       uses: actions/setup-python@v1
       with:
         python-version: 3.8
-    - name: Install Dependencies
+    - name: Install Python Dependencies
       run: |
         cd server/
         python -m pip install --upgrade pip
         pip install -r requirements.txt
-    - name: Use Node.js ${{ matrix.node-version }}
+        pip install flake8 pytest
+    - name: Lint with flake8
+      run: |
+        # stop the build if there are Python syntax errors or undefined names
+        flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
+        # pytest
+    - name: Setup Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v1
       with:
         node-version: '12.x'
@@ -29,13 +38,33 @@ jobs:
         cd client/ 
         npm install
         npm run build --if-present
-  
+        # npm test
+    - name: Upload client build
+      uses: actions/upload-artifact@v1
+      with:
+          name: build
+          path: build
+     
   deploy:
     needs: [build]
     runs-on: ubuntu-latest
     name: Deploy
 
     steps:
+    - uses: actions/checkout@master
+    - name: Download client build
+      uses: actions/download-artifact@v1
+      with:
+        name: build
+    - name: Copy build to server
+      uses: appleboy/scp-action@master
+      with:
+        host: ${{ secrets.HOST }}
+        username: ${{ secrets.USER }}
+        key: ${{ secrets.KEY_SECRET }}
+        port: ${{ secrets.PORT }}
+        source: "build,server"
+        target: "/home/"
     - name: Deploy
       uses: appleboy/ssh-action@master
       with:
@@ -44,6 +73,5 @@ jobs:
         key: ${{ secrets.KEY_SECRET }}
         port: ${{ secrets.PORT }}
         script: |
-          cd /var/www/weather-application/
-          git pull origin master
-          git status
+          cd /home/
+          ls
