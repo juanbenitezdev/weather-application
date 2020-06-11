@@ -8,7 +8,6 @@ on:
 jobs:
   
   build:
-
     runs-on: ubuntu-latest
     name: Build and Test
 
@@ -56,15 +55,22 @@ jobs:
       uses: actions/download-artifact@v1
       with:
         name: build
-    - name: Copy build to server
+    - name: Copy files to server
       uses: appleboy/scp-action@master
       with:
         host: ${{ secrets.HOST }}
         username: ${{ secrets.USER }}
         key: ${{ secrets.KEY_SECRET }}
         port: ${{ secrets.PORT }}
-        source: "build,server"
-        target: "home/kaynsel/test"
+        source: "build"
+        target: "/var/www/weather-application/client"
+      with:
+        host: ${{ secrets.HOST }}
+        username: ${{ secrets.USER }}
+        key: ${{ secrets.KEY_SECRET }}
+        port: ${{ secrets.PORT }}
+        source: "server"
+        target: "/var/www/weather-application/"
     - name: Deploy
       uses: appleboy/ssh-action@master
       with:
@@ -73,5 +79,14 @@ jobs:
         key: ${{ secrets.KEY_SECRET }}
         port: ${{ secrets.PORT }}
         script: |
-          cd /home/
-          ls
+          cd /var/www/weather-application/
+          cp .secrets/.env server/
+          cd server/
+          python3 -m venv env
+          source env/bin/activate
+          pip install -r requirements.txt
+          deactivate
+          sudo systemctl restart weather-app
+          sudo systemctl restart nginx
+
+

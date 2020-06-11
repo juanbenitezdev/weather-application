@@ -1,3 +1,6 @@
+from gevent import monkey
+monkey.patch_all()
+
 import requests
 import os
 import pytz
@@ -15,6 +18,7 @@ load_dotenv()
 OPEN_WEATHER_API_KEY = os.getenv("OPEN_WEATHER_API_KEY")
 OPEN_WEATHER_ENDPOINT = os.getenv("OPEN_WEATHER_ENDPOINT")
 OPEN_CAGE_API_KEY = os.getenv("OPEN_CAGE_API_KEY")
+DEBUG = os.getenv("DEBUG")
 
 app = Flask(__name__)
 CORS(app)
@@ -41,12 +45,16 @@ class User():
 def parser(data):
     now = datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S")
 
+    icon = data['current']['weather'][0]['icon']
+
+    icon_url = f"https://openweathermap.org/img/wn/{icon}@2x.png"
+
     weatherObject = {
         'summary': data['current']['weather'][0]['description'].capitalize(),
         'temperature': int(data['current']['temp']),
         # 'forecastMessage': data['daily']['summary'],
         'address': data['address'],
-        'icon': data['current']['weather'][0]['icon'],
+        'icon': icon_url,
         'timezone': data['timezone'],
         'last_updated': now
     }
@@ -132,4 +140,4 @@ def disconnect():
 if __name__ == '__main__':
     thread = threading.Thread(target=update, daemon=True)
     thread.start()
-    socketio.run(app, debug=True)
+    socketio.run(app, debug=DEBUG)
