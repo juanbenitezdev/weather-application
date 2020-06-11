@@ -55,7 +55,7 @@ jobs:
       uses: actions/download-artifact@v1
       with:
         name: build
-    - name: Copy files to server
+    - name: Copy client files to server
       uses: appleboy/scp-action@master
       with:
         host: ${{ secrets.HOST }}
@@ -64,6 +64,8 @@ jobs:
         port: ${{ secrets.PORT }}
         source: "build"
         target: "/var/www/weather-application/client"
+    - name: Copy server files to server
+      uses: appleboy/scp-action@master
       with:
         host: ${{ secrets.HOST }}
         username: ${{ secrets.USER }}
