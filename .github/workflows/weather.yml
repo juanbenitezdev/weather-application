@@ -64,7 +64,7 @@ jobs:
         key: ${{ secrets.KEY_SECRET }}
         port: ${{ secrets.PORT }}
         source: "build,server"
-        target: "/home/"
+        target: "home/kaynsel/test"
     - name: Deploy
       uses: appleboy/ssh-action@master
       with:
