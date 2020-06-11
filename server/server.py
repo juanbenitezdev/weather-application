@@ -18,7 +18,6 @@ load_dotenv()
 OPEN_WEATHER_API_KEY = os.getenv("OPEN_WEATHER_API_KEY")
 OPEN_WEATHER_ENDPOINT = os.getenv("OPEN_WEATHER_ENDPOINT")
 OPEN_CAGE_API_KEY = os.getenv("OPEN_CAGE_API_KEY")
-DEBUG = os.getenv("DEBUG")
 
 app = Flask(__name__)
 CORS(app)
@@ -140,4 +139,4 @@ def disconnect():
 if __name__ == '__main__':
     thread = threading.Thread(target=update, daemon=True)
     thread.start()
-    socketio.run(app, debug=DEBUG)
+    socketio.run(app)
